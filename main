@@ -1,0 +1,119 @@
+import random
+HANGMAN_PICS = ['''
+     +---+
+         |
+         |
+         |
+        ===''', '''
+     +---+
+     O   |
+         |
+         |
+       ===''', '''
+    +---+
+    O   |
+    |   |
+        |
+       ===''', '''
+    +---+
+    O   |
+   /|   |
+        |
+       ===''', '''
+    +---+
+    O   |
+   /|\  |
+        |
+       ===''', '''
+    +---+
+    O   |
+   /|\  |
+   /    |
+       ===''', '''
+    +---+
+    O   |
+   /|\  |
+   / \  |
+       ===''']
+GUESSED_LETTERS=[]
+TRUE_GUESS_NUMBER=[]
+CHARACTERS = []
+wrongGuess=0
+
+words='momentous fix spell acceptable aware voyage succeed sneaky pear bait maddening underwear cup macabre aberrant flood fog enchanted face bizarre sense stuff delay rough'.split()
+
+def getWord(list):
+    index = random.randint(0, len(list) - 1)
+    return list[index]
+
+def display(wrong,word):
+    for i in range (len(word)):
+        if i in TRUE_GUESS_NUMBER:
+            print(str(CHARACTERS[i]), end=(""))
+        else:
+            print("_", end=(""))
+    print(HANGMAN_PICS[wrong])
+
+def play(word):
+
+    for letter in word:
+        CHARACTERS.append(letter)
+
+
+    while (True):
+        global wrongGuess
+        if (wrongGuess == len(HANGMAN_PICS)-1):
+            print("You failed!")
+            print("The word was "+str(word))
+            break
+
+        elif len(TRUE_GUESS_NUMBER)==len(word):
+            print("You won!")
+            print("The word was " + str(word))
+            break
+
+        else:
+            guess(word)
+
+
+
+def main():
+    global wrongGuess
+    play(getWord(words))
+    a=True
+    while a:
+        var=input("Do you want to play again? (y/n)")
+        if(var=="n"):
+            break
+        else:
+            GUESSED_LETTERS.clear()
+            TRUE_GUESS_NUMBER.clear()
+            CHARACTERS.clear()
+            wrongGuess=0
+            play(getWord(words))
+
+def guess(word):
+    global wrongGuess
+    val = input("Please guess a word")
+    if val.isalpha():
+        if (val in GUESSED_LETTERS):
+            print("You already guessed that word")
+            print("Please guess another word")
+
+        else:
+            if (val in CHARACTERS):
+                for x in range(len(CHARACTERS)):
+                    if (word[x] == val):
+                        TRUE_GUESS_NUMBER.append(x)
+                        display(wrongGuess, word)
+            else:
+                wrongGuess += 1
+                display(wrongGuess, word)
+            GUESSED_LETTERS.append(val)
+            print(str(wrongGuess))
+    else:
+        print("You should enter a letter!")
+
+
+main()
+
